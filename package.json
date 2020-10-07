@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "express": "^4.17.1",
+    "ts-jest": "^26.4.1",
+    "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/concurrently": "^5.2.1",
+    "@types/express": "^4.17.8",
+    "@types/jest": "^26.0.14",
+    "@types/shelljs": "^0.8.8",
+    "concurrently": "^5.3.0",
+    "eslint": "^7.9.0",
+    "jest": "^26.4.2",
+    "jest-mock-extended": "^1.0.10",
+    "nodemon": "^2.0.4",
+    "shelljs": "^0.8.4",
+    "supertest": "^5.0.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "maxConcurrency": 1,
+    "preset": "ts-jest"
+  },
+  "nodemonConfig": {
+    "delay": 2500,
+    "ignore": [
+      "./src"
+    ],
+    "watch": [
+      "./dist"
+    ],
+    "verbose": true,
+    "ext": "js json"
+  },
+  "scripts": {
+    "start": "node --no-deprecation --max-semi-space-size=64 ./dist/index.js",
+    "serve-debug": "node --inspect --max-semi-space-size=64 ./dist/index.js",
+    "watch-serve-debug": "nodemon --exec npm run serve-debug",
+    "dev": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"nodemon --exec npm run serve-debug\"",
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w",
+    "test": "jest --coverage --forceExit --detectOpenHandles",
+    "test:coverage": "jest --coverage --forceExit --detectOpenHandles --collectCoverage=true",
+    "build": "npm run-script delete-dist-folder && npm run-script build-ts && npm run-script copy-static-assets",
+    "copy-static-assets": "ts-node ./script/copyStaticAssets.ts",
+    "delete-dist-folder": "ts-node ./script/deleteDistFolder.ts",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src/lib src/proto src/*.ts test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
